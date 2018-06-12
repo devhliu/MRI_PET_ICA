@@ -25,13 +25,14 @@ for i = 1: size(groups, 1)
     if groups(i).isdir
        subj = dir(fullfile(path, groups(i).name));
         for k = 3: size(subj)
-                contents = dir(fullfile(path, groups(i).name, subj(k).name));
+                subj_path = fullfile(path, groups(i).name, subj(k).name);
+                contents = dir(subj_path);
             if strfind(contents(3).name, 'SUV')
-                suv_list = [suv_list; contents(3).name];
-                mr_list = [mr_list; contents(4).name];
+                suv_list = [suv_list; fullfile(subj_path, contents(3).name)];
+                mr_list = [mr_list; fullfile(subj_path, contents(4).name)];
             else
-                suv_list = [suv_list; contents(4).name];
-                mr_list = [mr_list; contents(3).name];
+                suv_list = [suv_list; fullfile(subj_path, contents(4).name)];
+                mr_list = [mr_list; fullfile(subj_path, contents(3).name)];
             end
         end
     end
@@ -39,8 +40,8 @@ end
 
 
 for i = 1: size(suv_list, 1)
-    [str_path, ~, ~] = fileparts(suv_list{i});
-    [pet_path, ~, ~] = fileparts(mr_list{i});
+    [pet_path, suv_name, ~] = fileparts(suv_list{i});
+    [str_path, smr_name, ~] = fileparts(mr_list{i});
     if ~strcmp(pet_path, str_path)
         fprintf('%s and %s in %d.\n', str_path, pet_path, i);
     end
