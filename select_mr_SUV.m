@@ -1,4 +1,4 @@
-function [suv_list, mr_list] = select_mr_SUV(path)
+function [suv_list, mr_list] = select_mr_SUV()
 
 %%% Creates a two lists with full path of T1 and SUV of Subjects. Subjects
 % that miss one of the two modalities are shown in warning message
@@ -25,14 +25,14 @@ for i = 1: size(groups, 1)
     if groups(i).isdir
        subj = dir(fullfile(path, groups(i).name));
         for k = 3: size(subj)
-                subj_path = fullfile(path, groups(i).name, subj(k).name);
-                contents = dir(subj_path);
-            if strfind(contents(3).name, 'SUV')
-                suv_list = [suv_list; fullfile(subj_path, contents(3).name)];
-                mr_list = [mr_list; fullfile(subj_path, contents(4).name)];
-            else
-                suv_list = [suv_list; fullfile(subj_path, contents(4).name)];
-                mr_list = [mr_list; fullfile(subj_path, contents(3).name)];
+            subj_path = fullfile(path, groups(i).name, subj(k).name);
+            contents = dir(subj_path);
+            for j = 3: size(contents, 1)
+                if contains(contents(j).name, 'SUV', 'IgnoreCase',true)
+                    suv_list = [suv_list; fullfile(subj_path, contents(j).name)];
+                elseif contains(contents(j).name, 'cor')
+                    mr_list = [mr_list; fullfile(subj_path, contents(j).name)];
+                end
             end
         end
     end
@@ -44,5 +44,7 @@ for i = 1: size(suv_list, 1)
     [str_path, smr_name, ~] = fileparts(mr_list{i});
     if ~strcmp(pet_path, str_path)
         fprintf('%s and %s in %d.\n', str_path, pet_path, i);
+        
     end
 end
+

@@ -1,0 +1,4 @@
+1 coregister MRi to SUV using coreg_mr_SUV.m
+2 normalized subjects using normal.m
+3 clean folder using move files.m
+4 dartel normalization using dartel_simple.m
