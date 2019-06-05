@@ -3,6 +3,6 @@ P='/home/antogeo/data/ICA/Alice_Yorgos_Jitka/tmps_dartel/Template_6.nii';
 M = mni_mat.mni.affine;
 
 Nii = nifti(P);
-Nii.mat = mni.affine;
+Nii.mat = M;
 Nii.mat_intent = 4;
 create(Nii);
